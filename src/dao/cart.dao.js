@@ -44,7 +44,7 @@ const deleteProductInCart = async (cid, pid) => {
 
   const cart = await cartModel.findById(cid);
 
-  const productsFilter = cart.products.filter( prod => prod.product_id.toString() !== pid);
+  const productsFilter = cart.products.filter( prod => prod.product.toString() !== pid);
 
   const cartResponse = await cartModel.findByIdAndUpdate(cid, { $set: { products: productsFilter } }, { new: true });
 
