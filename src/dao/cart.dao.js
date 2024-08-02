@@ -2,12 +2,12 @@ import { cartModel } from "./models/cart.model.js";
 import mongoose from "mongoose";
 
 const getById = async (id) => {
-  const cart = await cartModel.findById(id); 
+  const cart = await cartModel.findById(id); // db.carts.findOne({_id: id})
   return cart;
 };
 
 const create = async (data) => {
-  const cart = await cartModel.create(data); 
+  const cart = await cartModel.create(data); // db.carts.insertOne({data})
   return cart;
 };
 
@@ -28,7 +28,16 @@ const addProductToCart = async (cid, pid) => {
   return cart;
 };
 
+const deleteProductInCart = async (cid, pid) => {
 
+  const cart = await cartModel.findById(cid);
+
+  const productsFilter = cart.products.filter( (prod) => prod.product._id.toString() !== pid);
+
+  const cartResponse = await cartModel.findByIdAndUpdate(cid, { $set: { products: productsFilter } }, { new: true });
+
+  return cartResponse;
+};
 
 const updateQuantityProductInCart = async (cid, pid, quantity) => {
   const cart = await cartModel.findOneAndUpdate(
@@ -38,17 +47,6 @@ const updateQuantityProductInCart = async (cid, pid, quantity) => {
   );
 
   return cart;
-};
-
-const deleteProductInCart = async (cid, pid) => {
-
-  const cart = await cartModel.findById(cid);
-
-  const productsFilter = cart.products.filter( prod => prod.product.toString() !== pid);
-
-  const cartResponse = await cartModel.findByIdAndUpdate(cid, { $set: { products: productsFilter } }, { new: true });
-
-  return cartResponse;
 };
 
 const deleteAllProductsInCart = async (cid) => {

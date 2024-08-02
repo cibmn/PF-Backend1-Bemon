@@ -18,7 +18,7 @@ const productSchema = new mongoose.Schema({
   stock: {
     type: Number,
   },
-  status: {                                                                                                                                                 
+  status: {
     type: Boolean,
     default: true,
   },
